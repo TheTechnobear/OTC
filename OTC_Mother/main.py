@@ -60,21 +60,14 @@ midi.init(etc)
 # init fb and main surfaces
 print "opening frame buffer..."
 hwscreen = pygame.display.set_mode(etc.RES,  pygame.FULLSCREEN | pygame.DOUBLEBUF, 32)
-print "1opening frame buffer..."
 screen = pygame.Surface(hwscreen.get_size())
-print "2opening frame buffer..."
 screen.fill((0,0,0)) 
-print "3opening frame buffer..."
 hwscreen.blit(screen, (0,0))
-print "4opening frame buffer..."
 pygame.display.flip()
 hwscreen.blit(screen, (0,0))
 pygame.display.flip()
-print "5opening frame buffer..."
 osd.loading_banner(hwscreen, "")
-print "6opening frame buffer..."
 time.sleep(2)
-print "7opening frame buffer..."
 
 # etc gets a refrence to screen so it can save screen grabs 
 etc.screen = screen

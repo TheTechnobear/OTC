@@ -80,7 +80,7 @@ def knobs_callback(path, args):
     etc.knob_hardware[1] = float(k2) / 1023
     etc.knob_hardware[2] = float(k3) / 1023
     etc.knob_hardware[3] = float(k4) / 1023
-    etc.knob_hardware[4] = float(k6) / 1023
+    etc.knob_hardware[4] = float(k5) / 1023
 
 #altered for organelle
 def keys_callback(path, args) :
