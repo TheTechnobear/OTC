@@ -99,6 +99,7 @@ for i in range(0, len(etc.mode_names)-1) :
         continue 
     try : 
         osd.loading_banner(hwscreen,"Loading " + str(etc.mode) )
+        print "Loading " + str(etc.mode) 
         mode.setup(screen, etc)
         etc.memory_used = psutil.virtual_memory()[2]
     except :
