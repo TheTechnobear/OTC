@@ -1,0 +1,7 @@
+*.pd_linux
+*.pd_darwin
+*.dll
+*.o
+*.so
+*.dylib
+*.pyc
