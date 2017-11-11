@@ -8,9 +8,15 @@ import urllib
 import liblo
 import time
 import socket
+import os
 
-GRABS_PATH = "/usbdrive/Grabs/"
-MODES_PATH = "/usbdrive/Modes/"
+USER_PATH = os.environ['USER_DIR']
+GRABS_PATH = USER_PATH+"/Grabs/"
+MODES_PATH = USER_PATH+"/Modes/"
+
+print "user path : " + USER_PATH
+print "modes : " + MODES_PATH
+print "grabs : " + GRABS_PATH
 
 try:
 	osc_target = liblo.Address(4000)

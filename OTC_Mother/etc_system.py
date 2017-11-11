@@ -16,9 +16,10 @@ import csv
 
 class System:
 
-    GRABS_PATH = "/usbdrive/Grabs/"
-    MODES_PATH = "/usbdrive/Modes/"
-    SCENES_PATH = "/usbdrive/Scenes.csv"
+    USER_PATH = os.environ['USER_DIR']
+    GRABS_PATH = USER_PATH+"/Grabs/"
+    MODES_PATH = USER_PATH+"/Modes/"
+    SCENES_PATH = USER_PATH+"/Scenes.csv"
 
     RES =  (1280,720)
 

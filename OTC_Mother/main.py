@@ -38,7 +38,7 @@ osc.send("/led", 7) # set led to running
 # set midi ch, check for file, default to 1
 ch = 1
 try :
-    file = open("/usbdrive/MIDI-Channel.txt", "r")
+    file = open(etc.USER_PATH+"/MIDI-Channel.txt", "r")
     line = file.readline()
     ch = int(line.strip())
 except IOError as (errno, strerror):
