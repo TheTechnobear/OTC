@@ -1,5 +1,9 @@
 #!/bin/sh
 
+USER_DIR=${USER_DIR:="/usbdrive"}
+# PATCH_DIR=${PATCH_DIR:="/usbdrive/Patches"}
+# FW_DIR=${FW_DIR:="/root"}
+# SCRIPTS_DIR=$FW_DIR/scripts
 
 
 IP=$(ip -o -4 addr list wlan0 | awk '{print $4}' | cut -d/ -f1)

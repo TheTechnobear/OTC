@@ -1,5 +1,11 @@
 #!/bin/sh
 
+USER_DIR=${USER_DIR:="/usbdrive"}
+# PATCH_DIR=${PATCH_DIR:="/usbdrive/Patches"}
+# FW_DIR=${FW_DIR:="/root"}
+# SCRIPTS_DIR=$FW_DIR/scripts
+
+
 sudo systemctl stop serial-getty@ttymxc0.service
 #sudo dmesg -n 1
 
@@ -8,7 +14,7 @@ echo $DIR
 
 oscsend localhost 4001 /oled/aux/clear i 1
 oscsend localhost 4001 /oled/aux/line/1 s "running ETC"
-oscsend localhost 4001 /oled/aux/line/2 s "in $DIR"
+oscsend localhost 4001 /oled/aux/line/2 s "modes : $USER_DIR"
 oscsend localhost 4001 /oled/setscreen i 1
 killall python2
 
