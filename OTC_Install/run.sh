@@ -14,6 +14,7 @@ oscsend localhost 4001 /oled/aux/line/5 s "do not interrupt!"
 
 echo installing otc > /usbdrive/otc_install.log
 cd pkg
+
 cp * /var/cache/pacman/pkg
 oscsend localhost 4001 /oled/aux/line/2 s "dependent pkgs"
 pacman -U --noconfirm /var/cache/pacman/pkg/sdl-1.2.15-7-armv7h.pkg.tar.xz  2>&1 >> /usbdrive/otc_install.log 
@@ -40,6 +41,9 @@ pip2 install pyliblo-0.10.0.tar.gz 2>&1 >>/usbdrive/otc_install.log
 
 oscsend localhost 4001 /oled/aux/line/2 s "pyalsaaudio"
 pip2 install pyalsaaudio-0.8.4.tar.gz 2>&1 >>/usbdrive/otc_install.log
+
+oscsend localhost 4001 /oled/aux/line/2 s "cherrypy"
+pip2 install --no-index --find-links=. cherrypy 2>&1 >>/usbdrive/otc_install.log
 
 cd ..
 
