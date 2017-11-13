@@ -100,6 +100,7 @@ def keys_callback(path, args) :
         if (etc.auto_clear) : etc.auto_clear = False
         else : etc.auto_clear = True
     if (k == 19 and v > 0) : etc.screengrab_flag = True
+    if (k == 21) : etc.shutdown(v)
     if (k == 23) : etc.update_trig_button(v)
 
 def init (etc_object) :

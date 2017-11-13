@@ -35,6 +35,14 @@ clocker = pygame.time.Clock() # for locking fps
 osd.init(etc)
 osc.send("/led", 7) # set led to running
 
+osc.send("/oled/line/1", " ")
+osc.send("/oled/line/2", " ")
+osc.send("/oled/line/3", " ")
+osc.send("/oled/line/4", " ")
+osc.send("/oled/line/5", " ")
+osc.send("/oled/setscreen", 3)
+osc.send("/patchLoaded", 1)
+
 # set midi ch, check for file, default to 1
 ch = 1
 try :
@@ -94,6 +102,7 @@ for i in range(0, len(etc.mode_names)-1) :
     try :
         etc.set_mode_by_index(i)
         mode = sys.modules[etc.mode]
+        info = sys.modules[etc.mode + ".info"]
     except AttributeError :
         print "mode not found, probably has error"
         continue 
@@ -123,11 +132,25 @@ if (etc.memory_used > 100): etc.memory_used = 100
 # set initial mode
 etc.set_mode_by_index(0)
 mode = sys.modules[etc.mode]
+info = sys.modules[etc.mode + ".info"]
 
 midi_led_flashing = False
 
+def modeChanged(modename, mode,info):
+    etc.modeChanged = False
+    osc.send("/oled/line/1", info.knob1[:16] + ' %0.0f%%' % (etc.knob1*100))
+    osc.send("/oled/line/2", info.knob2[:16] + ' %0.0f%%' % (etc.knob2*100))
+    osc.send("/oled/line/3", info.knob3[:16] + ' %0.0f%%' % (etc.knob3*100))
+    osc.send("/oled/line/4", info.knob4[:16] + ' %0.0f%%' % (etc.knob4*100))
+    osc.send("/oled/line/5", modename)
+
 while 1:
     
+    lknob1=etc.knob1
+    lknob2=etc.knob2
+    lknob3=etc.knob3
+    lknob4=etc.knob4
+
     # check for OSC
     osc.recv()
 
@@ -172,9 +195,13 @@ while 1:
     # set the mode on which to call draw
     try : 
         mode = sys.modules[etc.mode]
+        info = sys.modules[etc.mode + ".info"]
     except :
         #print "mode not loaded, probably has errors"
         etc.error = "Mode " + etc.mode  + " not loaded."
+
+    if(etc.modeChanged):
+        modeChanged(etc.mode,mode,info)
 
     # save a screen shot before drawing stuff
     if (etc.screengrab_flag):
@@ -216,11 +243,25 @@ while 1:
     pygame.display.flip()
 
     if etc.quit :
+        osc.send("/oled/line/1", "OTC stopped")
+        osc.send("/oled/line/2", " ")
+        osc.send("/oled/line/3", " ")
+        osc.send("/oled/line/4", " ")
+        osc.send("/oled/line/5", " ")
         sys.exit()
     
     # clear all the events
     etc.clear_flags()
     osc_msgs_recv = 0
+
+    if(etc.knob1!=lknob1) :
+        osc.send("/oled/line/1", info.knob1[:16] + ' %0.0f%%' % (etc.knob1*100))
+    if(etc.knob2!=lknob2) :
+        osc.send("/oled/line/2", info.knob2[:16] + ' %0.0f%%' % (etc.knob2*100))
+    if(etc.knob3!=lknob3) :
+        osc.send("/oled/line/3", info.knob3[:16] + ' %0.0f%%' % (etc.knob3*100))
+    if(etc.knob4!=lknob4) :
+        osc.send("/oled/line/4", info.knob4[:16] + ' %0.0f%%' % (etc.knob4*100))
 
 time.sleep(1)
 

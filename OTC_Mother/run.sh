@@ -6,20 +6,23 @@ export USER_DIR=${USER_DIR:="/usbdrive"}
 # SCRIPTS_DIR=$FW_DIR/scripts
 
 
+echo start otc mother > $USER_DIR/otc_mother.log
+
 sudo systemctl stop serial-getty@ttymxc0.service
 #sudo dmesg -n 1
 
 export DIR=`dirname $0`
 echo $DIR
 
-oscsend localhost 4001 /oled/aux/clear i 1
-oscsend localhost 4001 /oled/aux/line/1 s "running ETC"
-oscsend localhost 4001 /oled/aux/line/2 s "modes : $USER_DIR"
-oscsend localhost 4001 /oled/setscreen i 1
+oscsend localhost 4001 /oled/clear i 1
+oscsend localhost 4001 /oled/line/1 s "running OTC"
+oscsend localhost 4001 /oled/line/2 s "modes : $USER_DIR"
+oscsend localhost 4001 /oled/setscreen i 3
 killall python2
 
 cd $DIR
 
+echo init fb0 >> $USER_DIR/otc_mother.log
 ./fsquares
 cp splash /dev/fb0
 
@@ -27,5 +30,5 @@ cp splash /dev/fb0
 
 export SDL_VIDEODRIVER=fbcon
 
-python2 main.py &
+python2 main.py >> $USER_DIR/otc_mother.log 2>&1 &
 

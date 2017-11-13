@@ -9,6 +9,7 @@ import glob
 import sys
 import helpers
 import csv
+import time
 
 
 #knob 1-4 are pots used for control of mode
@@ -52,6 +53,7 @@ class System:
     mode_root = ''   # root path of current mode
     error = ''       # errors that happend during setup() or run()
     run_setup = False # flag to signal main loop to run setup() usually if a mode was reloaded
+    mode_changed = False;
 
     #scenes
     scenes = []     # 
@@ -99,6 +101,16 @@ class System:
     osd = False
     osd_first = False # when osd is first turned on this is used to gather info
     trig_button = False # if the button is held down or not
+    shutdownTime = -1
+
+    def shutdown(self, v) :
+        if (v>0) : 
+            self.shutdownTime = time.time();
+        elif (self.shutdownTime > 0) :
+             diff = time.time() - self.shutdownTime
+             if (diff > 2) :
+                print "shutdown"
+                self.quit  = True
 
     def update_trig_button(self, stat) :
         if (stat > 0 ):
@@ -116,12 +128,14 @@ class System:
         self.mode = self.mode_names[self.mode_index]
         self.mode_root = self.MODES_PATH + self.mode + "/"
         self.error = ''
+        self.modeChanged = True
 
     def set_mode_by_name (self, name) :
         self.mode = name 
         self.mode_index = self.mode_names.index(name)
         self.mode_root = self.MODES_PATH + self.mode + "/"
         self.error = ''
+        self.modeChanged = True
 
     def next_mode (self) :
         self.mode_index += 1
@@ -223,15 +237,26 @@ class System:
                 got_a_mode = True
             except Exception, e:
                 print traceback.format_exc()
+
+            info_path = self.MODES_PATH+mode_name+'/info.py'
+            try :
+                imp.load_source(mode_name+".info", info_path)
+            except Exception, e:
+                print traceback.format_exc()
         return got_a_mode
 
     # load a new mode (created from web editor)
     def load_new_mode(self, new_mode) :
-        print "loadeing new mode "+new_mode+"..."
+        print "loading new mode "+new_mode+"..."
         mode_path = self.MODES_PATH+new_mode+'/main.py'
         try :
             imp.load_source(new_mode, mode_path)
             self.mode_names.append(new_mode)
+        except Exception, e:
+            print traceback.format_exc()
+        info_path = self.MODES_PATH+mode_name+'/info.py'
+        try :
+            imp.load_source(mode_name+".info", info_path)
         except Exception, e:
             print traceback.format_exc()
         self.set_mode_by_name(new_mode)
@@ -242,6 +267,7 @@ class System:
         # delete the old, and reload
         if self.mode in sys.modules:  
             del(sys.modules[self.mode]) 
+            del(sys.modules[self.mode + ".info"]) 
         print "deleted module, reloading"
         try :
             imp.load_source(self.mode, self.mode_root+'/main.py')
@@ -249,6 +275,10 @@ class System:
         except Exception, e:
             self.error = traceback.format_exc()
             print "error reloading: " + self.error
+        try :
+            imp.load_source(mode_name+".info", info_path)
+        except Exception, e:
+            print traceback.format_exc()
         self.run_setup = True # set a flag so setup gets run from main loop
     
     # recent grabs, first check if Grabs folder is available, create if not
