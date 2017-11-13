@@ -18,7 +18,7 @@ cd pkg
 cp * /var/cache/pacman/pkg
 oscsend localhost 4001 /oled/aux/line/2 s "dependent pkgs"
 pacman -U --noconfirm /var/cache/pacman/pkg/sdl-1.2.15-7-armv7h.pkg.tar.xz  2>&1 >> /usbdrive/otc_install.log 
-pacman -U --noconfirm * 2>&1 > /usbdrive/otc_install.log 2>&1 >> /usbdrive/otc_install.log
+pacman -U --noconfirm * 2>&1 >> /usbdrive/otc_install.log
 oscsend localhost 4001 /oled/aux/line/2 s "install old pygame"
 pacman -U --noconfirm /var/cache/pacman/pkg/python2-pygame-1.9.1-10-armv7h.pkg.tar.xz 2>&1 >> /usbdrive/otc_install.log
 oscsend localhost 4001 /oled/aux/line/2 s "remove old pygame!"
@@ -28,19 +28,19 @@ cd ..
 
 cd pip
 oscsend localhost 4001 /oled/aux/line/2 s "pip 9.01"
-pip2 install --upgrade pip-9.0.1-py2.py3-none-any.whl 
+pip2 install --upgrade pip-9.0.1-py2.py3-none-any.whl  2>&1 >>/usbdrive/otc_install.log
 
 oscsend localhost 4001 /oled/aux/line/2 s "pygame"
-pip2 install pygame-1.9.3.tar.gz 2>&1 >>/usbdrive/otc_install.log
+pip2 install --upgrade pygame-1.9.3.tar.gz 2>&1 >>/usbdrive/otc_install.log
 
 oscsend localhost 4001 /oled/aux/line/2 s "psutil"
-pip2 install psutil-5.4.1.tar.gz 2>&1 >>/usbdrive/otc_install.log
+pip2 install --upgrade psutil-5.4.1.tar.gz 2>&1 >>/usbdrive/otc_install.log
 
 oscsend localhost 4001 /oled/aux/line/2 s "pyliblo"
-pip2 install pyliblo-0.10.0.tar.gz 2>&1 >>/usbdrive/otc_install.log
+pip2 install --upgrade pyliblo-0.10.0.tar.gz 2>&1 >>/usbdrive/otc_install.log
 
 oscsend localhost 4001 /oled/aux/line/2 s "pyalsaaudio"
-pip2 install pyalsaaudio-0.8.4.tar.gz 2>&1 >>/usbdrive/otc_install.log
+pip2 install --upgrade pyalsaaudio-0.8.4.tar.gz 2>&1 >>/usbdrive/otc_install.log
 
 oscsend localhost 4001 /oled/aux/line/2 s "cherrypy"
 pip2 install --no-index --find-links=. cherrypy 2>&1 >>/usbdrive/otc_install.log
