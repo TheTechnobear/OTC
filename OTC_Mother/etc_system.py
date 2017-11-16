@@ -254,9 +254,9 @@ class System:
             self.mode_names.append(new_mode)
         except Exception, e:
             print traceback.format_exc()
-        info_path = self.MODES_PATH+mode_name+'/info.py'
+        info_path = self.MODES_PATH+new_mode+'/info.py'
         try :
-            imp.load_source(mode_name+".info", info_path)
+            imp.load_source(new_mode+".info", info_path)
         except Exception, e:
             print traceback.format_exc()
         self.set_mode_by_name(new_mode)
@@ -276,7 +276,7 @@ class System:
             self.error = traceback.format_exc()
             print "error reloading: " + self.error
         try :
-            imp.load_source(mode_name+".info", info_path)
+            imp.load_source(self.mode + ".info", self.mode_root+'/info.py')
         except Exception, e:
             print traceback.format_exc()
         self.run_setup = True # set a flag so setup gets run from main loop
