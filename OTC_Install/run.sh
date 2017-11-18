@@ -13,22 +13,40 @@ oscsend localhost 4001 /oled/aux/line/1 s "installing OTC"
 oscsend localhost 4001 /oled/aux/line/5 s "do not interrupt!"
 
 echo installing otc > /usbdrive/otc_install.log
+
+
+openssl sha1 */* > manifest.new
+diff manifest.txt manifest.new; ec=$?; 
+if [ $ec -ne 0 ] 
+then 
+    oscsend localhost 4001 /enableauxsub i 0
+    oscsend localhost 4001 /oled/aux/line/4 s "FAILED install"
+    oscsend localhost 4001 /oled/aux/line/5 s "files corrupt"
+    echo corrupted install, redownload/check media >> /usbdrive/otc_install.log; 
+    exit -1 
+fi
+
 cd pkg
 
 cp * /var/cache/pacman/pkg
 oscsend localhost 4001 /oled/aux/line/2 s "dependent pkgs"
 pacman -U --noconfirm /var/cache/pacman/pkg/sdl-1.2.15-7-armv7h.pkg.tar.xz  2>&1 >> /usbdrive/otc_install.log 
 pacman -U --noconfirm * 2>&1 >> /usbdrive/otc_install.log
+
+oscsend localhost 4001 /oled/aux/line/2 s "uninstall new pygame"
+yes | pip2 uninstall pygame 2>&1 >> /usbdrive/otc_install.log
+
 oscsend localhost 4001 /oled/aux/line/2 s "install old pygame"
 pacman -U --noconfirm /var/cache/pacman/pkg/python2-pygame-1.9.1-10-armv7h.pkg.tar.xz 2>&1 >> /usbdrive/otc_install.log
-oscsend localhost 4001 /oled/aux/line/2 s "remove old pygame!"
+
+oscsend localhost 4001 /oled/aux/line/2 s "uninstall old pygame!"
 pacman -R --noconfirm python2-pygame 2>&1 >> /usbdrive/otc_install.log
 
 cd ..
 
 cd pip
 oscsend localhost 4001 /oled/aux/line/2 s "pip 9.01"
-pip2 install --upgrade pip-9.0.1-py2.py3-none-any.whl  2>&1 >>/usbdrive/otc_install.log
+pip2 install --upgrade pip-9.0.1-py2.py3-none-any.whl 2>&1 >>/usbdrive/otc_install.log
 
 oscsend localhost 4001 /oled/aux/line/2 s "pygame"
 pip2 install --upgrade pygame-1.9.3.tar.gz 2>&1 >>/usbdrive/otc_install.log
@@ -43,7 +61,7 @@ oscsend localhost 4001 /oled/aux/line/2 s "pyalsaaudio"
 pip2 install --upgrade pyalsaaudio-0.8.4.tar.gz 2>&1 >>/usbdrive/otc_install.log
 
 oscsend localhost 4001 /oled/aux/line/2 s "cherrypy"
-pip2 install --no-index --find-links=. cherrypy 2>&1 >>/usbdrive/otc_install.log
+pip2 install --upgrade --no-index --find-links=. cherrypy 2>&1 >>/usbdrive/otc_install.log
 
 cd ..
 
