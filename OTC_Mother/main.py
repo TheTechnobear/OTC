@@ -140,6 +140,8 @@ etc.set_mode_by_index(0)
 mode = sys.modules[etc.mode]
 info = sys.modules[etc.mode + ".info"]
 
+trigcount = 0
+lasttrigcount = 0
 midi_led_flashing = False
 
 def modeChanged(modename, mode,info):
@@ -156,6 +158,11 @@ while 1:
     lknob2=etc.knob2
     lknob3=etc.knob3
     lknob4=etc.knob4
+    laudiopeak = etc.audio_peak
+    if(etc.frame_count % 30) == 0 : 
+        lasttrigcount = trigcount
+        trigcount = 0
+
 
     # check for OSC
     osc.recv()
@@ -190,6 +197,8 @@ while 1:
 
     # check for sound
     sound.recv()
+    if(etc.audio_trig) :
+        trigcount = trigcount + 1
 
     # set the mode on which to call draw
     try : 
@@ -237,8 +246,9 @@ while 1:
     # osd
     if etc.osd :
         osd.render_overlay(hwscreen)
+    else : 
+        etc.fps = clocker.get_fps();
 
-    etc.fps = clocker.get_fps();
     clocker.tick(30)
     pygame.display.flip()
     etc.frame_count=etc.frame_count+1
@@ -263,6 +273,10 @@ while 1:
         osc.send("/oled/line/3", info.knob3[:16] + ' %0.0f%%' % (etc.knob3*100))
     if(etc.knob4!=lknob4) :
         osc.send("/oled/line/4", info.knob4[:16] + ' %0.0f%%' % (etc.knob4*100))
+    if(etc.audio_peak!=laudiopeak) :
+        peak = etc.audio_peak / 2900
+        trig = lasttrigcount
+        osc.send("/oled/vumeter", peak,peak, trig, trig)
 
 time.sleep(1)
 

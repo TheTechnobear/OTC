@@ -91,6 +91,7 @@ class System:
     midi_notes = [0] * 128
     midi_cc = [0] * 128
     midi_note_new = False
+    midi_new_notes = []
     midi_cc_new = False
     midi_pgm = 0
     midi_pgm_last = 0
@@ -186,16 +187,6 @@ class System:
         self.knob3 = self.knob[2]
         self.knob4 = self.knob[3]
         self.knob5 = self.knob[4]
-
-        # check for new notes
-        for i in range(0, 128):
-            if self.midi_notes[i] > 0 and self.midi_notes_last[i] == 0:
-                self.midi_note_new = True
-
-        # very last midi note controls auto clear
-        if (self.midi_notes[127] > 0 and self.midi_notes_last[127] == 0):
-            if (self.auto_clear) : self.auto_clear = False
-            else : self.auto_clear = True
 
     def foot_pressed(self) :
         if (len(self.scenes) > 0) :
@@ -422,7 +413,7 @@ class System:
     def color_picker( self ):
         # convert knob to 0-1
         c = float(self.knob4)
-        if c == self.last_fg_knob && c>.08 && c <= 0.94:
+        if c == self.last_fg_knob and c>.10 and c <= 0.92:
             return self.last_fg_color
 
         # primary randoms
@@ -432,61 +423,47 @@ class System:
             b = random.randrange(0, 2) * 255
             color = (r,g,b)
         # full ranoms
-        elif c > .94 :
+        elif c > .92 :
             color = (random.randrange(0,255), random.randrange(0,255), random.randrange(0,255))
         #colors
-        elif c > .20 :
-            
-            #r = float(control) / 1024 * 255
-            #g = float((control * 2) % 1024) / 1024 * 255
-            #b = float((control * 4) % 1024) / 1024 * 255
-            
-            r = math.sin(c * 2 * math.pi) * .5 + .5
-            g = math.sin(c * 4 * math.pi) * .5 + .5
-            b = math.sin(c * 8 * math.pi) * .5 + .5
+        elif c > .36 :
+            c1 = (c-0.36) * 1.75
+            r = math.sin(c1 * 2 * math.pi) * .5 + .5
+            g = math.sin(c1 * 4 * math.pi) * .5 + .5
+            b = math.sin(c1 * 8 * math.pi) * .5 + .5
             color = (r * 255,g * 255,b * 255)
-        # white
-        elif c > .18 :
-            color = (250, 250 ,250)
-        # grey 5
-        elif c > .16 :
-            color = (200, 200 ,200)
-        # grey 4
-        elif c > .14 :
-            color = (150, 150 ,150)
-        # grey 3
-        elif c > .12 :
-            color = (150, 150 ,150)
-        # grey 2
+        # greys
         elif c > .10 :
-            color = (100, 100 ,100)
-        # grey 1
-        elif c > .08 :
-            color = (50, 50, 50)
+            c1 = (c-0.10) * 3.5
+            color = (c1 * 255,c1 * 255,c1 * 255)
         # random greys
         elif c > .06 :
             rando = random.randrange(0,255)
             color = (rando, rando, rando)
-        else 
+        else :
             # all the way down random bw
             rando = random.randrange(0, 2)
             color = (rando * 255, rando * 255, rando * 255)
         
         color2 = (color[0], color[1], color[2])
-        last_fg_knob = c;
-        last_fg_color = color2;
+        self.last_fg_knob = c;
+        self.last_fg_color = color2;
         return color2
  
     def color_picker_bg( self ):
         c = self.knob5
-        if(self.last_bg_knob)
-            return last_bg_color
-
-        r = (1 - (math.cos(c * 3 * math.pi) * .5 + .5)) * c
-        g = (1 - (math.cos(c * 7 * math.pi) * .5 + .5)) * c
-        b = (1 - (math.cos(c * 11 * math.pi) * .5 + .5)) * c
+        if(c == self.last_bg_knob) :
+            return self.last_bg_color
         
-        color = (r * 255,g * 255,b * 255)
+        if( c < .25) :
+            c1 = c * 4.0  * 255.0
+            color = ( c1, c1, c1) 
+        else :
+            c1 = (c-0.25) * 1.33
+            r = (1 - (math.cos(c1 * 3 * math.pi) * .5 + .5)) * c1
+            g = (1 - (math.cos(c1 * 7 * math.pi) * .5 + .5)) * c1
+            b = (1 - (math.cos(c1 * 11 * math.pi) * .5 + .5)) * c1
+            color = (r * 255,g * 255,b * 255)
         
         self.bg_color = color
         self.last_bg_knob = c
@@ -500,6 +477,7 @@ class System:
         self.screengrab_flag = False
         self.midi_note_new = False
         self.midi_cc_new = False
+        self.midi_new_notes = []
 
 
 

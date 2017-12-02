@@ -29,7 +29,8 @@ cp splash /dev/fb0
 
 export SDL_VIDEODRIVER=fbcon
 
+mkdir -p /tmp/pids
 echo start python >> $USER_DIR/otc_mother.log
-python2 main.py >> $USER_DIR/otc_mother.log 2>&1 &
+python2 main.py >> $USER_DIR/otc_mother.log 2>&1 & echo $! > /tmp/pids/otc_mother.pid
 
 

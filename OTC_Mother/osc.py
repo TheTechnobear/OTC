@@ -102,10 +102,10 @@ def keys_callback(path, args) :
     elif (k == 19 and v > 0) : etc.screengrab_flag = True
     elif (k == 21) : etc.shutdown(v)
     elif (k == 23) : etc.update_trig_button(v)
-    else 
+    else :
         etc.new_midi = True
         note = k + 60
-        if (v 0) :
+        if (v> 0) :
             etc.midi_notes[note] = 1
             etc.midi_new_notes.append(note)
             etc.midi_note_new = True
@@ -145,6 +145,6 @@ def recv() :
     while (osc_server.recv(1)):
         pass
 
-def send(addr, args) :
+def send(addr, *args) :
     global osc_target
-    liblo.send(osc_target, addr, args) 
+    liblo.send(osc_target, addr, *args) 

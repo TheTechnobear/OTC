@@ -53,6 +53,9 @@ def parse_midi(midi):
                 if (midi_msg[2] > 0) :
                     etc.midi_notes[midi_msg[1]] = 1
                     etc.midi_note_new = True
+                    etc.midi_new_notes.append(midi_msg[1])
+                    if midi_msg[1] == 127:
+                        etc.auto_clear = not etc.auto_clear
                 else :
                     etc.midi_notes[midi_msg[1]] = 0
 
