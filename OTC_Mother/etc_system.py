@@ -74,6 +74,13 @@ class System:
     knob4 = .200
     knob5 = .200
    
+    # last fg and bg colours
+    # to stop recalc
+    last_fg_knob = -1
+    last_fg_color = 0
+    last_bg_knob = -1
+    last_bg_color = 0
+
     # knob values used internally
     knob = [.2] * 5
     knob_hardware = [.2] * 5
@@ -82,8 +89,9 @@ class System:
 
     # midi stuff (CC gets updated into knobs
     midi_notes = [0] * 128
-    midi_notes_last = [0] * 128
+    midi_cc = [0] * 128
     midi_note_new = False
+    midi_cc_new = False
     midi_pgm = 0
     midi_pgm_last = 0
     midi_clk = 0
@@ -414,36 +422,20 @@ class System:
     def color_picker( self ):
         # convert knob to 0-1
         c = float(self.knob4)
+        if c == self.last_fg_knob && c>.08 && c <= 0.94:
+            return self.last_fg_color
 
-        # all the way down random bw
-        rando = random.randrange(0, 2)
-        color = (rando * 255, rando * 255, rando * 255)
-
-        # random greys
-        if c > .02 :
-            rando = random.randrange(0,255)
-            color = (rando, rando, rando)
-        # grey 1
-        if c > .04 :
-            color = (50, 50, 50)
-        # grey 2
-        if c > .06 :
-            color = (100, 100 ,100)
-        # grey 3
-        if c > .08 :
-            color = (150, 150 ,150)
-        # grey 4
-        if c > .10 :
-            color = (150, 150 ,150)
-            
-        # grey 5
-        if c > .12 :
-            color = (200, 200 ,200)
-        # white
-        if c > .14 :
-            color = (250, 250 ,250)
+        # primary randoms
+        if c > .96 :
+            r = random.randrange(0, 2) * 255
+            g = random.randrange(0, 2) * 255
+            b = random.randrange(0, 2) * 255
+            color = (r,g,b)
+        # full ranoms
+        elif c > .94 :
+            color = (random.randrange(0,255), random.randrange(0,255), random.randrange(0,255))
         #colors
-        if c > .16 :
+        elif c > .20 :
             
             #r = float(control) / 1024 * 255
             #g = float((control * 2) % 1024) / 1024 * 255
@@ -453,21 +445,43 @@ class System:
             g = math.sin(c * 4 * math.pi) * .5 + .5
             b = math.sin(c * 8 * math.pi) * .5 + .5
             color = (r * 255,g * 255,b * 255)
-        # full ranoms
-        if c > .96 :
-            color = (random.randrange(0,255), random.randrange(0,255), random.randrange(0,255))
-        # primary randoms
-        if c > .98 :
-            r = random.randrange(0, 2) * 255
-            g = random.randrange(0, 2) * 255
-            b = random.randrange(0, 2) * 255
-            color = (r,g,b)
+        # white
+        elif c > .18 :
+            color = (250, 250 ,250)
+        # grey 5
+        elif c > .16 :
+            color = (200, 200 ,200)
+        # grey 4
+        elif c > .14 :
+            color = (150, 150 ,150)
+        # grey 3
+        elif c > .12 :
+            color = (150, 150 ,150)
+        # grey 2
+        elif c > .10 :
+            color = (100, 100 ,100)
+        # grey 1
+        elif c > .08 :
+            color = (50, 50, 50)
+        # random greys
+        elif c > .06 :
+            rando = random.randrange(0,255)
+            color = (rando, rando, rando)
+        else 
+            # all the way down random bw
+            rando = random.randrange(0, 2)
+            color = (rando * 255, rando * 255, rando * 255)
         
         color2 = (color[0], color[1], color[2])
+        last_fg_knob = c;
+        last_fg_color = color2;
         return color2
  
     def color_picker_bg( self ):
         c = self.knob5
+        if(self.last_bg_knob)
+            return last_bg_color
+
         r = (1 - (math.cos(c * 3 * math.pi) * .5 + .5)) * c
         g = (1 - (math.cos(c * 7 * math.pi) * .5 + .5)) * c
         b = (1 - (math.cos(c * 11 * math.pi) * .5 + .5)) * c
@@ -475,6 +489,8 @@ class System:
         color = (r * 255,g * 255,b * 255)
         
         self.bg_color = color
+        self.last_bg_knob = c
+        self.last_bg_color = color
         return color
 
     def clear_flags(self):
@@ -483,8 +499,7 @@ class System:
         self.run_setup = False
         self.screengrab_flag = False
         self.midi_note_new = False
-        for i in range(0, 128):
-            self.midi_notes_last[i] = self.midi_notes[i]
+        self.midi_cc_new = False
 
 
 

@@ -33,6 +33,8 @@ def parse_midi(midi):
             # CC
             if (msg_type == 0xB) :
                 etc.new_midi = True
+                etc.midi_cc_new = True
+                etc.midi_cc[midi_msg[1]] = midi_msg[2]
                 for i in range(0,5) :
                     if (midi_msg[1] == 21 + i) :
                         cc = midi_msg[2]
@@ -50,6 +52,7 @@ def parse_midi(midi):
                 etc.new_midi = True
                 if (midi_msg[2] > 0) :
                     etc.midi_notes[midi_msg[1]] = 1
+                    etc.midi_note_new = True
                 else :
                     etc.midi_notes[midi_msg[1]] = 0
 

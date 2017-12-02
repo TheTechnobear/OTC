@@ -89,19 +89,29 @@ def keys_callback(path, args) :
     # key 0 = aux , use for switching
     # use 'black keys' for functions, to give some 'grouping'
     if (k == 2 and v > 0) : etc.prev_mode()
-    if (k == 4 and v > 0) : etc.next_mode()
-    if (k == 7 and v > 0) : etc.prev_scene()
-    if (k == 9 and v > 0) : etc.next_scene()
-    if (k == 11) : etc.save_or_delete_scene(v)
-    if (k == 14 and v > 0) : 
+    elif (k == 4 and v > 0) : etc.next_mode()
+    elif (k == 7 and v > 0) : etc.prev_scene()
+    elif (k == 9 and v > 0) : etc.next_scene()
+    elif (k == 11) : etc.save_or_delete_scene(v)
+    elif (k == 14 and v > 0) : 
         if (etc.osd) : etc.set_osd(False)
         else : etc.set_osd(True)
-    if (k == 16 and v > 0) : 
+    elif (k == 16 and v > 0) : 
         if (etc.auto_clear) : etc.auto_clear = False
         else : etc.auto_clear = True
-    if (k == 19 and v > 0) : etc.screengrab_flag = True
-    if (k == 21) : etc.shutdown(v)
-    if (k == 23) : etc.update_trig_button(v)
+    elif (k == 19 and v > 0) : etc.screengrab_flag = True
+    elif (k == 21) : etc.shutdown(v)
+    elif (k == 23) : etc.update_trig_button(v)
+    else 
+        etc.new_midi = True
+        note = k + 60
+        if (v 0) :
+            etc.midi_notes[note] = 1
+            etc.midi_new_notes.append(note)
+            etc.midi_note_new = True
+        else :
+            etc.midi_notes[note] = 0
+
 
 def init (etc_object) :
     global osc_server, osc_target, etc
