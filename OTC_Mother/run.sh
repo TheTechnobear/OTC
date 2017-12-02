@@ -23,12 +23,13 @@ killall python2
 cd $DIR
 
 echo init fb0 >> $USER_DIR/otc_mother.log
-./fsquares
+./fsquares >> $USER_DIR/otc_mother.log 2>&1 
+echo start splash >> $USER_DIR/otc_mother.log
 cp splash /dev/fb0
-
-
 
 export SDL_VIDEODRIVER=fbcon
 
+echo start python >> $USER_DIR/otc_mother.log
 python2 main.py >> $USER_DIR/otc_mother.log 2>&1 &
+
 

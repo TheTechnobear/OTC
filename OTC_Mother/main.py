@@ -65,10 +65,18 @@ osc.send("/midich", int(etc.midi_ch))
 # setup midi input from USB
 midi.init(etc)
 
+print "display info:" + str(pygame.display.Info());
+print "display modes:" + str(pygame.display.list_modes());
+
 # init fb and main surfaces
 print "opening frame buffer..."
+#note: HWSURFACE is defaulted if present
 hwscreen = pygame.display.set_mode(etc.RES,  pygame.FULLSCREEN | pygame.DOUBLEBUF, 32)
-screen = pygame.Surface(hwscreen.get_size())
+print "hwscreen : " +str(hwscreen)
+
+screen = hwscreen.copy()
+print "screen : " +str(screen)
+
 screen.fill((0,0,0)) 
 hwscreen.blit(screen, (0,0))
 pygame.display.flip()
@@ -79,7 +87,6 @@ time.sleep(2)
 
 # etc gets a refrence to screen so it can save screen grabs 
 etc.screen = screen
-print str(etc.screen) + " " +  str(screen)
 
 # load modes, post banner if none found
 if not (etc.load_modes()) :
@@ -122,7 +129,6 @@ etc.load_grabs()
 etc.load_scenes()
 
 # used to measure fps
-start = time.time()
 
 # get total memory consumed, cap at 75%
 etc.memory_used = psutil.virtual_memory()[2]
@@ -182,13 +188,6 @@ while 1:
             if event.key == pygame.K_ESCAPE:
                 exit()
 
-    # measure fps
-    etc.frame_count += 1
-    if ((etc.frame_count % 50) == 0):
-        now = time.time()
-        etc.fps = 1 / ((now - start) / 50)
-        start = now
-
     # check for sound
     sound.recv()
 
@@ -233,14 +232,16 @@ while 1:
         etc.error = traceback.format_exc()
  
     #draw the main screen, limit fps 30
-    clocker.tick(30)
     hwscreen.blit(screen, (0,0))
     
     # osd
     if etc.osd :
         osd.render_overlay(hwscreen)
 
+    etc.fps = clocker.get_fps();
+    clocker.tick(30)
     pygame.display.flip()
+    etc.frame_count=etc.frame_count+1
 
     if etc.quit :
         osc.send("/oled/line/1", "OTC stopped")
