@@ -1,6 +1,4 @@
-ajaxURL = 'http://' + location.host
-
-//alert (ajaxURL)
+ajaxURL = 'http://' + location.host + "/otc"
 
 function getGrab(img) {
         $("#big").empty();

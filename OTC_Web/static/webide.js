@@ -1,8 +1,7 @@
 editor = null
 currentmode = ''
-ajaxURL = 'http://' + location.host
+ajaxURL = 'http://' + location.host  + "/otc"
 
-//alert (ajaxURL)
 
 function getmode(mode) {
     $.get(ajaxURL + '/get_mode/' + mode, function(data) {
@@ -14,7 +13,7 @@ function getmode(mode) {
 }
 
 function getmodeList() {
-     $.getJSON(ajaxURL + '', function(data) {
+     $.getJSON(ajaxURL + '/modelist', function(data) {
         $("#modees").empty();
         $.each(data, function (i,v) {
           
