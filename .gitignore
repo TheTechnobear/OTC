@@ -5,3 +5,6 @@
 *.so
 *.dylib
 *.pyc
+OTC_Web.zip
+OTC_Install.zip
+*/manifest.txt

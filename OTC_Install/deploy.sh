@@ -50,7 +50,7 @@ echo install done  >>$USER_DIR/otc_install.log
 cd ..
 rm -rf $1
 
-exit 2
+exit 3
 
 
 
