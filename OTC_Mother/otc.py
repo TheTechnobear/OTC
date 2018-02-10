@@ -1,3 +1,5 @@
+from signal import alarm, signal, SIGALRM, SIGKILL
+
 import pygame
 import time
 import etc_system
@@ -11,6 +13,8 @@ import osd
 import liblo
 import midi
 print "starting..."
+
+maxfps = 30
 
 # create etc object
 # this holds all the data (mode and preset names, knob values, midi input, sound input, current states, etc...)
@@ -28,7 +32,25 @@ sound.init(etc)
 
 # init pygame, this has to happen after sound is setup
 # but before the graphics stuff below
-pygame.init()
+
+#nasty hack that seems to deal with pygame hanging during init
+#https://stackoverflow.com/questions/17035699/pygame-requires-keyboard-interrupt-to-init-display
+
+
+class Alarm(Exception):
+    pass
+def alarm_handler(signum, frame):
+    raise Alarm
+
+signal(SIGALRM, alarm_handler)
+alarm(3)
+try:
+    pygame.init()
+    hwscreen = pygame.display.set_mode(etc.RES,  pygame.FULLSCREEN | pygame.DOUBLEBUF, 32)
+    alarm(0)
+except Alarm:
+    raise KeyboardInterrupt
+
 clocker = pygame.time.Clock() # for locking fps
 
 # on screen display and other screen helpers
@@ -70,8 +92,6 @@ print "display modes:" + str(pygame.display.list_modes());
 
 # init fb and main surfaces
 print "opening frame buffer..."
-#note: HWSURFACE is defaulted if present
-hwscreen = pygame.display.set_mode(etc.RES,  pygame.FULLSCREEN | pygame.DOUBLEBUF, 32)
 print "hwscreen : " +str(hwscreen)
 
 screen = hwscreen.copy()
@@ -159,7 +179,7 @@ while 1:
     lknob3=etc.knob3
     lknob4=etc.knob4
     laudiopeak = etc.audio_peak
-    if(etc.frame_count % 30) == 0 : 
+    if(etc.frame_count % maxfps) == 0 : 
         lasttrigcount = trigcount
         trigcount = 0
 
@@ -249,7 +269,7 @@ while 1:
     else : 
         etc.fps = clocker.get_fps();
 
-    clocker.tick(30)
+    clocker.tick(maxfps)
     pygame.display.flip()
     etc.frame_count=etc.frame_count+1
 
