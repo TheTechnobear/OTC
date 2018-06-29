@@ -12,7 +12,7 @@ import sound
 import osd
 import liblo
 import midi
-print "starting..."
+print "starting OTC"
 
 maxfps = 30
 
@@ -20,6 +20,8 @@ maxfps = 30
 # this holds all the data (mode and preset names, knob values, midi input, sound input, current states, etc...)
 # it gets passed to the modes which use the audio midi and knob values
 etc = etc_system.System()
+print "VERSION " + etc.VERSION
+
 
 # just to make sure
 etc.clear_flags()

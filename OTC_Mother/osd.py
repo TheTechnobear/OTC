@@ -189,7 +189,7 @@ def render_overlay(screen) :
     screen.blit(text, text_rect)
     
     # version
-    mode_str = " v1.2 "
+    mode_str = etc.VERSION
     text = font.render(mode_str, True, etc.WHITE, etc.BLACK)
     text_rect = text.get_rect()
     text_rect.x = 1180

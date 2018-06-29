@@ -17,6 +17,7 @@ import time
 
 class System:
 
+    VERSION = " v1.5 "
     USER_PATH = os.environ['USER_DIR']
     GRABS_PATH = USER_PATH+"/Grabs/"
     MODES_PATH = USER_PATH+"/Modes/"
