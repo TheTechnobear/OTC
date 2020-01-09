@@ -1,0 +1,200 @@
+
+
+OrganelleM changes
+
+OTC_Install needs replacement, for pygame install... we also dont need web, as its already installed.
+
+OTC_Web - looks fine - just remove install prevention
+OTC_Mother- no deploy!? can just be placed in System
+
+
+Changes: 
+
+OTC_Install:
+
+sudo  ~/fw_dir/scripts/remount-rw.sh 
+sudo apt-get update
+sudo apt-get install pygame
+sudo pip2 install psutil     
+sudo pip2 install pyalsaaudio
+
+install modes into /sdcard/Modes
+
+OTC_Mother:
+add deploy.sh
+
+
+OTC_Web:
+none?
+
+
+
+Status:
+freetype2 not initialised - 0 mode not working,
+sound.py - had to comment out setrate as was not compiling!
+other modes not working
+
+
+
+
+
+
+=============
+
+
+pygame install 
+
+
+
+music@organellem2:/sdcard/projects/OTC $ sudo apt-get install python-pygame
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following additional packages will be installed:
+  fonts-freefont-ttf libblas-common libblas3 libcaca0 libfluidsynth1 libgfortran3 liblapack3 libmikmod3 libportmidi0 libsdl-image1.2 libsdl-mixer1.2 libsdl-ttf2.0-0
+  libsdl1.2debian musescore-soundfont-gm python-numpy timgm6mb-soundfont
+Suggested packages:
+  fluidsynth timidity gfortran python-nose python-numpy-dbg python-numpy-doc python-pygame-doc fluid-soundfont-gm musescore
+The following NEW packages will be installed:
+  fonts-freefont-ttf libblas-common libblas3 libcaca0 libfluidsynth1 libgfortran3 liblapack3 libmikmod3 libportmidi0 libsdl-image1.2 libsdl-mixer1.2 libsdl-ttf2.0-0
+  libsdl1.2debian musescore-soundfont-gm python-numpy python-pygame timgm6mb-soundfont
+0 upgraded, 17 newly installed, 0 to remove and 87 not upgraded.
+Need to get 14.5 MB/14.7 MB of archives.
+After this operation, 37.8 MB of additional disk space will be used.
+Do you want to continue? [Y/n] 
+
+
+
+Get:1 http://archive.raspberrypi.org/debian stretch/ui armhf libsdl1.2debian armhf 1.2.15+dfsg1-4+rpt2 [163 kB]
+Get:3 http://archive.raspberrypi.org/debian stretch/main armhf python-pygame armhf 1.9.3+dfsg-2 [526 kB]           
+Get:2 http://ftp.cica.es/mirrors/Linux/raspbian/raspbian stretch/main armhf libcaca0 armhf 0.99.beta19-2.1~deb9u1 [335 kB]
+Get:4 http://ftp.cica.es/mirrors/Linux/raspbian/raspbian stretch/main armhf libmikmod3 armhf 3.3.10-1 [120 kB]
+Get:5 http://ftp.cica.es/mirrors/Linux/raspbian/raspbian stretch/main armhf libsdl-mixer1.2 armhf 1.2.12-11+b1 [77.3 kB]
+Get:6 http://ftp.cica.es/mirrors/Linux/raspbian/raspbian stretch/main armhf libsdl-ttf2.0-0 armhf 2.0.11-3 [19.0 kB]
+Get:7 http://ftp.cica.es/mirrors/Linux/raspbian/raspbian stretch/main armhf fonts-freefont-ttf all 20120503-6 [4316 kB]
+Get:8 http://ftp.cica.es/mirrors/Linux/raspbian/raspbian stretch/main armhf libblas-common armhf 3.7.0-2 [14.2 kB]
+Get:9 http://ftp.cica.es/mirrors/Linux/raspbian/raspbian stretch/main armhf libgfortran3 armhf 6.3.0-18+rpi1+deb9u1 [166 kB]
+Get:10 http://ftp.cica.es/mirrors/Linux/raspbian/raspbian stretch/main armhf libblas3 armhf 3.7.0-2 [107 kB]
+Get:11 http://ftp.cica.es/mirrors/Linux/raspbian/raspbian stretch/main armhf liblapack3 armhf 3.7.0-2 [1509 kB]
+Get:12 http://ftp.cica.es/mirrors/Linux/raspbian/raspbian stretch/main armhf libportmidi0 armhf 1:217-6 [20.2 kB]                                                         
+Get:13 http://ftp.cica.es/mirrors/Linux/raspbian/raspbian stretch/main armhf libsdl-image1.2 armhf 1.2.12-5+deb9u2 [32.1 kB]                                              
+Get:14 http://ftp.cica.es/mirrors/Linux/raspbian/raspbian stretch/main armhf timgm6mb-soundfont all 1.3-2 [5421 kB]                                                       
+Get:15 http://ftp.cica.es/mirrors/Linux/raspbian/raspbian stretch/main armhf musescore-soundfont-gm all 2.0.3+dfsg1-2 [21.5 kB]                                           
+Get:16 http://ftp.cica.es/mirrors/Linux/raspbian/raspbian stretch/main armhf python-numpy armhf 1:1.12.1-3 [1694 kB]                                                      
+Fetched 14.5 MB in 11s (1267 kB/s)                                                                                                                                        
+apt-listchanges: Can't set locale; make sure $LC_* and $LANG are correct!
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = "UTF-8",
+	LANG = "en_GB.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("en_GB.UTF-8").
+locale: Cannot set LC_CTYPE to default locale: No such file or directory
+locale: Cannot set LC_ALL to default locale: No such file or directory
+Selecting previously unselected package libfluidsynth1:armhf.
+(Reading database ... 77690 files and directories currently installed.)
+Preparing to unpack .../00-libfluidsynth1_1.1.6-4_armhf.deb ...
+Unpacking libfluidsynth1:armhf (1.1.6-4) ...
+Selecting previously unselected package libcaca0:armhf.
+Preparing to unpack .../01-libcaca0_0.99.beta19-2.1~deb9u1_armhf.deb ...
+Unpacking libcaca0:armhf (0.99.beta19-2.1~deb9u1) ...
+Selecting previously unselected package libsdl1.2debian:armhf.
+Preparing to unpack .../02-libsdl1.2debian_1.2.15+dfsg1-4+rpt2_armhf.deb ...
+Unpacking libsdl1.2debian:armhf (1.2.15+dfsg1-4+rpt2) ...
+Selecting previously unselected package libmikmod3:armhf.
+Preparing to unpack .../03-libmikmod3_3.3.10-1_armhf.deb ...
+Unpacking libmikmod3:armhf (3.3.10-1) ...
+Selecting previously unselected package libsdl-mixer1.2:armhf.
+Preparing to unpack .../04-libsdl-mixer1.2_1.2.12-11+b1_armhf.deb ...
+Unpacking libsdl-mixer1.2:armhf (1.2.12-11+b1) ...
+Selecting previously unselected package libsdl-ttf2.0-0:armhf.
+Preparing to unpack .../05-libsdl-ttf2.0-0_2.0.11-3_armhf.deb ...
+Unpacking libsdl-ttf2.0-0:armhf (2.0.11-3) ...
+Selecting previously unselected package fonts-freefont-ttf.
+Preparing to unpack .../06-fonts-freefont-ttf_20120503-6_all.deb ...
+Unpacking fonts-freefont-ttf (20120503-6) ...
+Selecting previously unselected package libblas-common.
+Preparing to unpack .../07-libblas-common_3.7.0-2_armhf.deb ...
+Unpacking libblas-common (3.7.0-2) ...
+Selecting previously unselected package libgfortran3:armhf.
+Preparing to unpack .../08-libgfortran3_6.3.0-18+rpi1+deb9u1_armhf.deb ...
+Unpacking libgfortran3:armhf (6.3.0-18+rpi1+deb9u1) ...
+Selecting previously unselected package libblas3.
+Preparing to unpack .../09-libblas3_3.7.0-2_armhf.deb ...
+Unpacking libblas3 (3.7.0-2) ...
+Selecting previously unselected package liblapack3.
+Preparing to unpack .../10-liblapack3_3.7.0-2_armhf.deb ...
+Unpacking liblapack3 (3.7.0-2) ...
+Selecting previously unselected package libportmidi0:armhf.
+Preparing to unpack .../11-libportmidi0_1%3a217-6_armhf.deb ...
+Unpacking libportmidi0:armhf (1:217-6) ...
+Selecting previously unselected package libsdl-image1.2:armhf.
+Preparing to unpack .../12-libsdl-image1.2_1.2.12-5+deb9u2_armhf.deb ...
+Unpacking libsdl-image1.2:armhf (1.2.12-5+deb9u2) ...
+Selecting previously unselected package timgm6mb-soundfont.
+Preparing to unpack .../13-timgm6mb-soundfont_1.3-2_all.deb ...
+Unpacking timgm6mb-soundfont (1.3-2) ...
+Selecting previously unselected package musescore-soundfont-gm.
+Preparing to unpack .../14-musescore-soundfont-gm_2.0.3+dfsg1-2_all.deb ...
+Unpacking musescore-soundfont-gm (2.0.3+dfsg1-2) ...
+Selecting previously unselected package python-numpy.
+Preparing to unpack .../15-python-numpy_1%3a1.12.1-3_armhf.deb ...
+Unpacking python-numpy (1:1.12.1-3) ...
+Selecting previously unselected package python-pygame.
+Preparing to unpack .../16-python-pygame_1.9.3+dfsg-2_armhf.deb ...
+Unpacking python-pygame (1.9.3+dfsg-2) ...
+Setting up libblas-common (3.7.0-2) ...
+Setting up libgfortran3:armhf (6.3.0-18+rpi1+deb9u1) ...
+Setting up libblas3 (3.7.0-2) ...
+update-alternatives: using /usr/lib/libblas/libblas.so.3 to provide /usr/lib/libblas.so.3 (libblas.so.3) in auto mode
+Processing triggers for libc-bin (2.24-11+deb9u4) ...
+Setting up libportmidi0:armhf (1:217-6) ...
+Processing triggers for man-db (2.7.6.1-2) ...
+Setting up timgm6mb-soundfont (1.3-2) ...
+Setting up libcaca0:armhf (0.99.beta19-2.1~deb9u1) ...
+Setting up fonts-freefont-ttf (20120503-6) ...
+Setting up libfluidsynth1:armhf (1.1.6-4) ...
+Processing triggers for fontconfig (2.11.0-6.7) ...
+Setting up liblapack3 (3.7.0-2) ...
+update-alternatives: using /usr/lib/lapack/liblapack.so.3 to provide /usr/lib/liblapack.so.3 (liblapack.so.3) in auto mode
+Setting up libsdl1.2debian:armhf (1.2.15+dfsg1-4+rpt2) ...
+Setting up musescore-soundfont-gm (2.0.3+dfsg1-2) ...
+Setting up python-numpy (1:1.12.1-3) ...
+Setting up libmikmod3:armhf (3.3.10-1) ...
+Setting up libsdl-ttf2.0-0:armhf (2.0.11-3) ...
+Setting up libsdl-image1.2:armhf (1.2.12-5+deb9u2) ...
+Setting up libsdl-mixer1.2:armhf (1.2.12-11+b1) ...
+Setting up python-pygame (1.9.3+dfsg-2) ...
+Processing triggers for libc-bin (2.24-11+deb9u4) ...
+music@organellem2:/sdcard/projects/OTC $ 
+
+
+
+music@organellem2:/sdcard/projects/OTC $ pip2 install psutil
+Collecting psutil
+  Downloading https://files.pythonhosted.org/packages/73/93/4f8213fbe66fc20cb904f35e6e04e20b47b85bee39845cc66a0bcf5ccdcb/psutil-5.6.7.tar.gz (448kB)
+    100% |################################| 450kB 342kB/s 
+Building wheels for collected packages: psutil
+  Running setup.py bdist_wheel for psutil ... done
+  Stored in directory: /home/music/.cache/pip/wheels/52/41/b0/bf50409fe2b1d3b79afa3eed71b54b3e30fe5b695db2c7ba2e
+Successfully built psutil
+Installing collected packages: psutil
+Successfully installed psutil-5.6.7
+
+
+
+music@organellem2:/sdcard/projects/OTC $ pip2 install pyalsaaudio
+Collecting pyalsaaudio
+  Downloading https://files.pythonhosted.org/packages/52/b6/44871791929d9d7e11325af0b7be711388dfeeab17147988f044a41a6d83/pyalsaaudio-0.8.4.tar.gz (315kB)
+    100% |################################| 317kB 541kB/s 
+Building wheels for collected packages: pyalsaaudio
+  Running setup.py bdist_wheel for pyalsaaudio ... done
+  Stored in directory: /home/music/.cache/pip/wheels/90/74/b8/362c8d8e9fefe2fc2a31881c272053eccae6fd22ecd461f672
+Successfully built pyalsaaudio
+Installing collected packages: pyalsaaudio
+Successfully installed pyalsaaudio-0.8.4
+
+
+
